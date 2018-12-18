@@ -1,0 +1,26 @@
+{
+  "name": "compact-prefix-tree",
+  "version": "1.0.0",
+  "description": "A serializable compact prefix trie",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "compact-prefix-tree",
+    "compact-radix-tree",
+    "compact-trie",
+    "data-structure",
+    "patricia-tree",
+    "prefix-tree",
+    "prefix",
+    "radix-tree",
+    "trie"
+  ],
+  "author": "Sid Vishnoi <sidvishnoi8@gmail.com>",
+  "license": "MIT",
+  "typings": "index.d.ts",
+  "devDependencies": {
+    "jest": "^23.6.0"
+  }
+}
