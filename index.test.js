@@ -67,7 +67,7 @@ const sampleTrie = {
   }
 };
 
-test("contructor: throws if argument is passed is invalid", () => {
+test("contructor: throws if argument passed is invalid", () => {
   expect(() => new CompactPrefixTree("abc")).toThrow();
   expect(() => new CompactPrefixTree([1])).toThrow();
 });

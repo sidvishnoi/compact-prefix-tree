@@ -2,7 +2,7 @@
 class CompactPrefixTree {
   /**
    * Create a CompactPrefixTree from the given list of words
-  //  * @param {string[]} words
+   * @param {string[]} words
    */
   constructor(words = []) {
     if (!Array.isArray(words)) {
@@ -38,12 +38,7 @@ class CompactPrefixTree {
    * @param {string} word
    */
   prefix(word) {
-    const prefix = getPrefix(word, this.T);
-    const isProper = this.words.has(prefix);
-    return {
-      prefix,
-      isProper
-    };
+    return getPrefix(word, this.T);
   }
 
   /**
@@ -60,16 +55,16 @@ class CompactPrefixTree {
 
 module.exports = {
   add,
+  CompactPrefixTree,
   default: CompactPrefixTree,
   getPrefix,
   getWordsFromTrie,
-  CompactPrefixTree,
 };
 
 /**
  * Add a word to Trie
  * @param {string} word word to add
- * @param {object} T plain JS object with prefixes
+ * @param {import(".").Trie} T plain JS object with prefixes
  */
 function add(word, T) {
   let l = word.length;
@@ -96,7 +91,7 @@ function add(word, T) {
   const hasSiblings = siblings.some(sibling => {
     let s = 0;
     while (s < l && sibling[s] == word[s]) s++;
-    const commonPrefix = (s < l && s > 1) ? sibling.substr(0, s) : "";
+    const commonPrefix = s < l && s > 1 ? sibling.substr(0, s) : "";
 
     if (commonPrefix) {
       // rearrange the trie to move word with prefix collision
@@ -119,34 +114,28 @@ function add(word, T) {
 
 /**
  * Get longest prefix of word in Trie
- * @param {string} word
- * @param {object} T
+ * @param {string} word word whose prefix is to be searched
+ * @param {import(".").Trie} T tree
  */
 function getPrefix(word, T) {
-  return _getPrefix(word, T, "");
-}
-
-/**
- *
- * @param {string} word
- * @param {object} T
- * @param {string} pre
- */
-function _getPrefix(word, T, pre) {
-  if (T === null) return pre;
-  let l = word.length;
-  if (l === 0) return "";
-  let i = 0;
+  const len = word.length;
   let prefix = "";
-  while (i < l && !T.hasOwnProperty(prefix)) {
-    prefix += word[i++];
+  let i = 0;
+  while (T !== null && i < len) {
+    let key = "";
+    while (!T.hasOwnProperty(key) && i < len) {
+      key += word[i++];
+    }
+    if (!T.hasOwnProperty(key)) break;
+    prefix += key;
+    T = T[key] || null;
   }
-  return pre + _getPrefix(word.substr(i), T[prefix], prefix);
+  return { prefix, isProper: T === null };
 }
 
 /**
  * Get all entries from the trie
- * @param {object} T
+ * @param {import(".").Trie} T
  * @returns {Set<string>}
  */
 function getWordsFromTrie(T) {
@@ -157,7 +146,7 @@ function getWordsFromTrie(T) {
 
 /**
  * Get all entries from the trie
- * @param {object} T
+ * @param {import(".").Trie} T
  * @param {Set<string>} words
  * @param {string} prefix
  */
@@ -165,7 +154,7 @@ function _getWords(T, words, prefix) {
   for (const pre of Object.keys(T)) {
     const word = prefix + pre;
     words.add(word);
-    if (T.hasOwnProperty(pre) && T[pre] !== null && Object.keys(T[pre]).length) {
+    if (T.hasOwnProperty(pre) && T[pre] !== null) {
       words.delete(word);
       _getWords(T[pre], words, word);
     }
