@@ -13,7 +13,7 @@ npm install compact-prefix-tree
 ### General Usage
 
 ``` js
-import { CompactPrefixTree } from "compact-prefix-tree";
+import { CompactPrefixTree } from "compact-prefix-tree/index.js";
 // OR
 const { CompactPrefixTree } = require("compact-prefix-tree/cjs");
 
