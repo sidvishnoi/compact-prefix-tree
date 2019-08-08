@@ -1,4 +1,4 @@
-const { CompactPrefixTree, getWordsFromTrie } = require(".");
+const { CompactPrefixTree, getWordsFromTrie } = require("./cjs");
 
 const testItems = [
   "http://www.w3.org/TR/mixed-content/",
@@ -68,6 +68,7 @@ const sampleTrie = {
 };
 
 test("contructor: throws if argument passed is invalid", () => {
+  // @ts-ignore
   expect(() => new CompactPrefixTree("abc")).toThrow();
   expect(() => new CompactPrefixTree([1])).toThrow();
 });

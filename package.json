@@ -4,7 +4,14 @@
   "description": "A serializable compact prefix trie",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "build": "npm run build:amd && npm run build:cjs && npm run build:esm",
+    "clean": "rm -rf index.js index.d.ts amd/ cjs/",
+    "dev": "tsc -w",
+    "prepare": "npm run build",
+    "test": "jest",
+    "build:amd": "tsc index.ts -m amd -t es6 --outDir amd",
+    "build:cjs": "tsc index.ts -m commonjs -t es6 --outDir cjs",
+    "build:esm": "tsc index.ts -m esnext -t esnext -d"
   },
   "keywords": [
     "compact-prefix-tree",
@@ -19,8 +26,9 @@
   ],
   "author": "Sid Vishnoi <sidvishnoi8@gmail.com>",
   "license": "MIT",
-  "typings": "index.d.ts",
+  "types": "index.d.ts",
   "devDependencies": {
-    "jest": "^23.6.0"
+    "jest": "^23.6.0",
+    "typescript": "^3.5.3"
   }
 }

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "removeComments": false,
+    "strict": true,
+    "newLine": "LF",
+  }
+}

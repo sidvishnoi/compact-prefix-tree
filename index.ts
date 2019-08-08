@@ -1,17 +1,19 @@
-// @ts-check
-class CompactPrefixTree {
+export interface Trie {
+  [prefix: string]: Trie | null;
+}
+
+export class CompactPrefixTree {
+  public words: Set<string>;
+  private T: Trie;
   /**
    * Create a CompactPrefixTree from the given list of words
-   * @param {string[]} words
    */
-  constructor(words = []) {
+  constructor(words: string[] = []) {
     if (!Array.isArray(words)) {
       throw new TypeError(`Expected string[], got ${typeof words}`);
     }
-    /** @type {Set<string>} */
-    this.words = new Set();
+    this.words = new Set<string>();
 
-    /** @type {import(".").Trie} */
     this.T = {};
 
     for (const word of words) {
@@ -21,9 +23,8 @@ class CompactPrefixTree {
 
   /**
    * Add a word to the trie
-   * @param {string} word
    */
-  add(word) {
+  add(word: string) {
     if (typeof word !== "string") {
       throw new TypeError(`Expected string, got ${typeof word}`);
     }
@@ -35,15 +36,13 @@ class CompactPrefixTree {
 
   /**
    * Get the longest prefix of word
-   * @param {string} word
    */
-  prefix(word) {
+  prefix(word: string) {
     return getPrefix(word, this.T);
   }
 
   /**
    * Get all entries from the trie
-   * @returns {Set<string>}
    */
   get items() {
     if (this.words.size && Object.keys(this.T)) {
@@ -53,20 +52,12 @@ class CompactPrefixTree {
   }
 }
 
-module.exports = {
-  add,
-  CompactPrefixTree,
-  default: CompactPrefixTree,
-  getPrefix,
-  getWordsFromTrie,
-};
+export default CompactPrefixTree;
 
 /**
  * Add a word to Trie
- * @param {string} word word to add
- * @param {import(".").Trie} T plain JS object with prefixes
  */
-function add(word, T) {
+export function add(word: string, T: Trie | null): void {
   let l = word.length;
   if (!l) return;
 
@@ -84,6 +75,8 @@ function add(word, T) {
     }
   }
 
+  if (T === null) throw new Error("Unexpected error.");
+
   // no prefix found. insert word and check for prefix collision
   const siblings = Object.keys(T);
   l = word.length;
@@ -98,6 +91,7 @@ function add(word, T) {
       // into new common prefix subtrie
       T[commonPrefix] = {};
       add(sibling.substr(s), T[commonPrefix]);
+      // @ts-ignore
       T[commonPrefix][sibling.substr(s)] = T[sibling];
       add(word.substr(s), T[commonPrefix]);
       delete T[sibling];
@@ -113,11 +107,9 @@ function add(word, T) {
 }
 
 /**
- * Get longest prefix of word in Trie
- * @param {string} word word whose prefix is to be searched
- * @param {import(".").Trie} T tree
+ * Get longest prefix of given word in Trie
  */
-function getPrefix(word, T) {
+export function getPrefix(word: string, T: Trie | null) {
   const len = word.length;
   let prefix = "";
   let i = 0;
@@ -135,22 +127,18 @@ function getPrefix(word, T) {
 
 /**
  * Get all entries from the trie
- * @param {import(".").Trie} T
- * @returns {Set<string>}
  */
-function getWordsFromTrie(T) {
-  const words = new Set();
+export function getWordsFromTrie(T: Trie) {
+  const words = new Set<string>();
   _getWords(T, words, "");
   return words;
 }
 
 /**
  * Get all entries from the trie
- * @param {import(".").Trie} T
- * @param {Set<string>} words
- * @param {string} prefix
  */
-function _getWords(T, words, prefix) {
+function _getWords(T: Trie | null, words: Set<string>, prefix: string) {
+  if (T === null) return;
   for (const pre of Object.keys(T)) {
     const word = prefix + pre;
     words.add(word);
