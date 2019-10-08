@@ -1,9 +1,8 @@
 {
   "name": "compact-prefix-tree",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A serializable compact prefix trie",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "build": "npm run build:amd && npm run build:cjs && npm run build:esm",
     "clean": "rm -rf index.js index.d.ts amd/ cjs/",
